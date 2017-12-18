@@ -3,7 +3,7 @@
     var Session = {
       userInfo: {username: undefined,room: "WORLD",avatar: ""},
       target: "",
-      pc: null, //RTCPeerConnection      
+      pc: null, //RTCPeerConnection
       //functions
       updateUserInfo : function(){
         var opt = UI.opt_elements;
@@ -57,24 +57,19 @@
     //
     //**************************************************************************************
     Session.userInfo.username = UI.opt_elements.username.value = prompt('Enter a username');
-    var serverURL = 'https://localhost:3000';
-    // var socket = io.connect('http://localhost:3000');
-    var socket = io.connect(serverURL,{secure:true});
+    var webServerURL       =  'https://localhost:3000';
+    var signalingServerURL =  'http://127.0.0.1:3001';
 
-    // socket.on('news', function (data) {
-    //   console.log(data);
-    //   UI.opt_elements.username.value += data.count;
-    //   Session.updateUserInfo();
-    //   socket.emit('my other event', { my: 'data' });
-    // });
-    socket.on('requestuserinfo', function(){
-      socket.emit('receiveuserinfo', Session.userInfo);
+    //socket for the web server
+    var socketW = io.connect(webServerURL,{secure:true});
+    //socket for the signaling server
+    var socketS = io.connect(signalingServerURL);
+
+    socketW.on('requestuserinfo', function(){
+      socketW.emit('receiveuserinfo', Session.userInfo);
     });
 
-    // socket.on('',function(parameter){
-
-    //});
-    socket.on('userlistadd',function(user){
+    socketW.on('userlistadd',function(user){
       //Add the user to the list of connected users
       console.log(user);
       var userlist= document.getElementById('userlist');
@@ -87,39 +82,40 @@
       item.addEventListener("click", engage);
       item.id = user;
       item.className='center-align collection-item';
-      
+
       userlist.appendChild(item);
 
     });
-    socket.on('userlistremove',function(user){
+    socketW.on('userlistremove',function(user){
       //Remove a user from the list
       var itemToRemove = document.getElementById(user);
       itemToRemove.parentNode.removeChild(itemToRemove);
 
     });
-    socket.on('incomingOffer',function(message){
+
+    //==============SIGNALING METHODS=======================
+    socketS.on('incomingOffer',function(message){
       console.log('incoming offer from: '+message.username);
       // $('#modal1').modal('open');
       Session.target = message.username;
       handleIncomingOffer(message.sdp);
     });
-    socket.on('incomingAnswer',function(message){
+    socketS.on('incomingAnswer',function(message){
       handleIncomingAnswer(message.sdp);
     });
 
-    socket.on('newIceCandidate',function(message){
+    socketS.on('newIceCandidate',function(message){
       console.log('new candidate arrived');
       var candidate = new RTCIceCandidate(message.candidate);
       Session.pc.addIceCandidate(candidate)
       .then(function(){console.log('new candidate added');})
       .catch(handleError);
-      
-
     });
-    socket.on('closeConnection',function(){
-      console.log('The peer has ended the call')
-      closePeerConnection();
-    });
+    //=====================================================
+    // socket.on('closeConnection',function(){
+    //   console.log('The peer has ended the call')
+    //   closePeerConnection();
+    // });
 
     //*******************************************************
 
@@ -149,7 +145,7 @@
     }
 
     function closePeerConnection(){
-      if (Session.pc) {          
+      if (Session.pc) {
         if (remoteVideo.srcObject) {
           remoteVideo.srcObject.getTracks().forEach(track => track.stop());
           remoteVideo.srcObject = null;
@@ -166,8 +162,8 @@
     }
     function hangUp(){
       //close connection and notify target
-      
-      socket.emit('endCall',{
+
+      socketW.emit('endCall',{
         target: Session.target
       });
       closePeerConnection();
@@ -182,7 +178,7 @@
       //the object that ICE layer want us to transmit
       console.log('new candidate to transmit');
       if(event.candidate){
-        socket.emit('iceCandidateMessage',{
+        socketS.emit('iceCandidateMessage',{
           target: Session.target,
           candidate: event.candidate
         });
@@ -200,7 +196,7 @@
       var callerSDP = new RTCSessionDescription(sdp);
       Session.pc.setRemoteDescription(callerSDP)
       .then(function(){
-          //caller SDP set successfull 
+          //caller SDP set successfull
           console.log('Setting up local media');
           navigator.mediaDevices.getUserMedia({
             audio: true,
@@ -223,7 +219,7 @@
           .then(function(){
             console.log('sending answer to caller');
             //send the answer to the caller
-            socket.emit('sdpAnswerMessage',{
+            socketS.emit('sdpAnswerMessage',{
               username: Session.userInfo.username,
               target: Session.target,
               sdp: Session.pc.localDescription
@@ -231,7 +227,7 @@
           });
         })
         .catch(handleError);
-    //end handleIncomingOffer 
+    //end handleIncomingOffer
     }
     function handleNegotiationNeeded(){
       if(Session.pc.localDescription.sdp != ""){
@@ -250,7 +246,7 @@
         //now sending it to the peer
         console.log('localDescription set');
         console.log('sending offer to '+Session.target);
-        socket.emit('sdpOfferMessage',{
+        socketS.emit('sdpOfferMessage',{
           username: Session.userInfo.username,
           target: Session.target,
           sdp: Session.pc.localDescription
@@ -302,4 +298,3 @@
     function handleError(error){
       console.error("Error "+error.name+": "+error.message);
     }
-   
