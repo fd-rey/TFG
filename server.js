@@ -9,7 +9,7 @@ var options = {
 	cert:fs.readFileSync('./file.crt')
 };
 
-var serverPort = 3000;
+var serverPort = 8080;
 
 // var server = require('http').Server(app);
 var server = https.createServer(options, app);
@@ -18,7 +18,7 @@ var io = require('socket.io')(server);
 app.use(express.static(__dirname + '/public'));
 
 server.listen(serverPort, function () {
-  console.log('Web server listening on 3000!');
+  console.log('Web server listening on '+serverPort);
 });
 
 var count = 0;
