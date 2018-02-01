@@ -26,7 +26,6 @@ var connectedUsers={};
 
 io.on('connection', function (socket)
 {
-
   socket.emit('requestuserinfo');
 
 	console.log(connectedUsers)
@@ -56,10 +55,10 @@ io.on('connection', function (socket)
 
 
   socket.on('disconnect', function () {
-    // var userToRemove = connectedUsers[socket.id].username;
-    // socket.broadcast.emit('userlistremove',userToRemove);
-    // delete connectedUsers[socket.id];
-    // console.log(userToRemove+" disconnected from the server");
+    var userToRemove = connectedUsers[socket.id].username;
+    socket.broadcast.emit('userlistremove',userToRemove);
+    delete connectedUsers[socket.id];
+    console.log(userToRemove+" disconnected from the server");
   });
 
 //#########################################################
