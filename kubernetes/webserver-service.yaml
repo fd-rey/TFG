@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: webrtc-webserver
+  name: webrtc-webserver
+spec:
+  ports:
+  - port: 8080         #port targeted by the service on any pod with the selector
+    protocol: TCP
+    targetPort: 8080   #port the container accepts trafic on
+    nodePort:  30001   #listening port on the cluster
+  selector:
+    run: webrtc-webserver
+  type: NodePort

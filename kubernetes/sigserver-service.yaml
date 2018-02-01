@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: signaling-server
+  name: signaling-server
+spec:
+  ports:
+  - port: 8080         #port targeted by the service on any pod with the selector
+    protocol: TCP
+    targetPort: 8080   #port the container accepts trafic on
+    nodePort:  30002   #listening port on the cluster
+  selector:
+    run: signaling-server
+  type: NodePort
