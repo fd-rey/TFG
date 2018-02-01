@@ -57,8 +57,10 @@
     //
     //**************************************************************************************
     Session.userInfo.username = UI.opt_elements.username.value = prompt('Enter a username');
-    var webServerURL       =  'https://localhost:3000';
-    var signalingServerURL =  'http://127.0.0.1:3001';
+    var signalingServerPort = 30002;
+    var webServerURL        =  window.location.host;
+    var signalingServerURL  =  `${window.location.hostname}:${signalingServerPort}`;
+    console.log(`Signaling server assigned: ${signalingServerURL}`);
 
     //socket for the web server
     var socketW = io.connect(webServerURL,{secure:true});
