@@ -5,11 +5,9 @@
 `eval $(minikube docker-env)`
 
 Inside the folder with the Dockerfile run:
-
 `docker build -t tag:version .`
 
 Example:
-
 `docker build -t webrtc-webserver:v1 .`
 
 **Deploy webserver**
@@ -20,20 +18,18 @@ Example:
 
 `kubectl run signaling-server --image=signaling-server:v1 --port=8080`
 
-**create webserver service**
+**Create webserver service**
 
 `kubectl create -f kubernetes/webserver-service.yaml`
 
-**create singaling server service**
+**Create singaling server service**
 
 `kubectl create -f kubernetes/sigserver-service.yaml`
 
-**update images**
+**Update images**
 
-Rebuild the image to update
-
+Rebuild the image to update:
 `docker build -t signaling-server:v2 .`
 
-Set the new image to the deployment
-
+Set the new image to the deployment:
 `kubectl set image deployment/signaling-server signaling-server=signaling-server:v2`
