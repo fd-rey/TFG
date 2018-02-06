@@ -1,8 +1,8 @@
 
 var fs = require('fs');
-var https = require('https');
 var express = require('express');
 var app = express();
+var https = require('https');
 
 var options = {
 	key: fs.readFileSync('./file.pem'),

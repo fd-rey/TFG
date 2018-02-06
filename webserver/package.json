@@ -1,8 +1,7 @@
 {
   "name": "TFG-socket-WebRTC",
   "version": "0.0.2",
-  "description": "Code base of my webrtc webapp for my
-  computer science bachelor's degree final project",
+  "description": "Code base of my webrtc webapp for my computer science bachelor's degree final project",
   "author": "Francisco Rey Rivera",
   "main": "server.js",
   "repository":{

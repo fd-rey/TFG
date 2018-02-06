@@ -1,13 +1,24 @@
+var fs = require('fs');
 var app = require('express')();
-var server = require('http').Server(app);
+var https = require('https');
+var options = {
+	key: fs.readFileSync('./file.pem'),
+	cert:fs.readFileSync('./file.crt')
+};
+
+var serverPort = 8080;
+var server = https.createServer(options, app);
 var io = require('socket.io')(server);
 
-var serverPort = 3001;
 server.listen(serverPort, function () {
   console.log('Signaling server listening on '+serverPort);
 });
 
 var count = 0;
+
+app.get('/', function (req, res) {
+  res.send('<html><head></head><body><p>Hi from signaling-server</p></body></html>');
+});
 
 //allow only 2 connected clients
 

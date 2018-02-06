@@ -1,0 +1,18 @@
+{
+  "name": "TFG-socketio-signaling-server",
+  "version": "0.0.2",
+  "description": "Signaling server code of my webrtc webapp for my computer science bachelor's degree final project",
+  "author": "Francisco Rey Rivera",
+  "main": "signalingServer.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fd-rey/TFG.git"
+  },
+  "scripts": {
+    "start": "node signalingServer.js"
+  },
+  "dependencies": {
+    "express": "^4.10.2",
+    "socket.io": "^2.0.4"
+  }
+}
