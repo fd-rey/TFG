@@ -4,7 +4,7 @@ import multiprocessing as mp
 import datetime
 
 def cpuDump(shouldStop):
-    filename ="cpu_dump.txt"
+    filename ="/tmp/cpu_dump.txt"
     f = open(filename,"a")
     now = time.time()
     f.write('### '+str(datetime.datetime.now()).split('.')[0]+"\n")
@@ -20,7 +20,7 @@ def cpuDump(shouldStop):
 
 
 def memDump(shouldStop):
-    f = open("mem_dump.txt","a")
+    f = open("/tmp/mem_dump.txt","a")
     f.write('### '+str(datetime.datetime.now()).split('.')[0]+"\n")
     mem = psutil.virtual_memory()
     totalInMibs = mem.total/float(1024*1024)
