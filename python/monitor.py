@@ -35,6 +35,17 @@ def memDump(shouldStop):
         time.sleep(0.5)
     f.close()
 
+def consumeResources():
+    #create a large matrix
+    M = 15000
+    A = []
+    for i in range (M):
+        A.append([0 for x in range(M)])
+        mem = psutil.virtual_memory()
+        if mem.percent > 70:
+            break
+    print 'done'
+    A = None
 
 if __name__ == '__main__':
 
@@ -44,11 +55,18 @@ if __name__ == '__main__':
     memProcess = mp.Process(target=memDump,args=(stop,))
     memProcess.start()
 
+    time.sleep(4)
     # start simulation
-
+    print "begin simulation"
+    consume1 =  mp.Process(target=consumeResources)
+    consume1.start()
+    consume1.join()
+    # consume2 =  mp.Process(target=consumeResources)
+    # consume2.start()
+    # consume2.join()
+    print "end simulation"
     # end simulation
-    time.sleep(5)
-    print "sleepd"
+    time.sleep(4)
     stop.value = 1
     cpuProcess.join()
     memProcess.join()
