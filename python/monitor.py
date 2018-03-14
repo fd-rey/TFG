@@ -61,9 +61,6 @@ if __name__ == '__main__':
     consume1 =  mp.Process(target=consumeResources)
     consume1.start()
     consume1.join()
-    # consume2 =  mp.Process(target=consumeResources)
-    # consume2.start()
-    # consume2.join()
     print "end simulation"
     # end simulation
     time.sleep(4)
