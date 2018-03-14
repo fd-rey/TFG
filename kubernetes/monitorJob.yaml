@@ -17,7 +17,7 @@ spec:
         volumeMounts:
         - name: tmp
           mountPath: /tmp
-      - name: count-log-2
+      - name: monitor-mem
         image: busybox
         args: [/bin/sh, -c, 'tail -n+1 -f /tmp/mem_dump.txt']
         volumeMounts:
