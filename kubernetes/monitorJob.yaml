@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
       - name: monitor
-        image: monitor-resources:v1
+        image: monitor-resources:v2
         volumeMounts:
         - name: tmp
           mountPath: /tmp
