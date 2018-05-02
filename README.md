@@ -33,3 +33,10 @@ Rebuild the image to update:
 
 Set the new image to the deployment:
 `kubectl set image deployment/signaling-server signaling-server=signaling-server:v2`
+
+**Run simulation**
+Create the job
+`kubectl create -f monitorJob.yaml`
+
+Wait for the job to finish and then access the containers logs
+`kubect logs <pod> <container>`
