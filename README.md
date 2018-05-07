@@ -43,9 +43,19 @@ Set the new image to the deployment:
 Enter into the minikube node shell:
 `minikube ssh`
 
-Check if there is the /mnt/data dir, if not create it
+Check if there is the /data/experimet1 dir exists, if not create it
+`sudo mkdir /data/experiment1`
 
-In second terminal:
+Exit minikube shell: `exit`
+
+Mount a local path pointing to minikube vm /data/experiment1
+
+`mkdir results`
+
+`minikube mount results:/data/experiment1`
+
+
+In a second terminal:
 
 Create persistent volume resource
 
@@ -56,10 +66,12 @@ Create persistent volume claim resource
 `kubectl create -f kubernetes/persistentVolumeClaim.yaml`
 
 Create CronJob, it will execute the simulation each minute,
-and write log files into the cluster node, at /mnt/data
+and write log files into the pod's /tmp which points to the
+node cluster /data/experiment folder, which points to our local
+folder /results
 `kubectl create -f monitorCronJobPersistent.yaml`
 
-Wait the desired minutes and in the first terminal check the files
+Wait the desired minutes, more minutes, more data.
 
 Delete the CronJob to stop the simulation executions
 `kubectl delete cronjob monitor`
