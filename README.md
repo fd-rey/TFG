@@ -1,5 +1,9 @@
 # TFG
 
+**kubect autocompletion**
+
+`echo "source <(kubectl completion bash)" >> ~/.bashrc`
+
 **Containerize apps using minikube docker**
 
 `eval $(minikube docker-env)`
@@ -35,8 +39,27 @@ Set the new image to the deployment:
 `kubectl set image deployment/signaling-server signaling-server=signaling-server:v2`
 
 **Run simulation**
-Create the job
-`kubectl create -f monitorJob.yaml`
 
-Wait for the job to finish and then access the containers logs
-`kubect logs <pod> <container>`
+Enter into the minikube node shell:
+`minikube ssh`
+
+Check if there is the /mnt/data dir, if not create it
+
+In second terminal:
+
+Create persistent volume resource
+
+`kubectl create -f kubernetes/persistentVolume.yaml`
+
+Create persistent volume claim resource
+
+`kubectl create -f kubernetes/persistentVolumeClaim.yaml`
+
+Create CronJob, it will execute the simulation each minute,
+and write log files into the cluster node, at /mnt/data
+`kubectl create -f monitorCronJobPersistent.yaml`
+
+Wait the desired minutes and in the first terminal check the files
+
+Delete the CronJob to stop the simulation executions
+`kubectl delete cronjob monitor`
