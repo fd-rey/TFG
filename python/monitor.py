@@ -41,12 +41,12 @@ def memDump(shouldStop):
 
 def consumeResources():
     #create a large matrix
-    M = 19000
+    M = 15000
     A = []
     for i in range (M):
         A.append([0 for x in range(M)])
         mem = psutil.virtual_memory()
-        if mem.percent > 70:
+        if mem.percent > 75:
             break
     print 'done'
     A = None
