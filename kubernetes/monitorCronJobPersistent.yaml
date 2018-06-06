@@ -1,0 +1,21 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: monitor
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+          - name: storage
+            persistentVolumeClaim:
+              claimName: monitor-pv-claim
+          containers:
+          - name: monitor
+            image: monitor-resources:v2
+            volumeMounts:
+            - name: storage
+              mountPath: /tmp
+          restartPolicy: Never

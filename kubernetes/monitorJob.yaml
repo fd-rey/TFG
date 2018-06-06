@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: monitor
+spec:
+  template:
+    spec:
+      containers:
+      - name: monitor
+        image: monitor-resources:v2
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      - name: monitor-cpu
+        image: busybox
+        args: [/bin/sh, -c, 'tail -n+1 -f /tmp/cpu_dump.txt']
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      - name: monitor-mem
+        image: busybox
+        args: [/bin/sh, -c, 'tail -n+1 -f /tmp/mem_dump.txt']
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      restartPolicy: Never
+      volumes:
+      - name: tmp
+        emptyDir: {}
