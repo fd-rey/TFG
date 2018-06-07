@@ -14,7 +14,7 @@ spec:
               claimName: monitor-pv-claim
           containers:
           - name: monitor
-            image: monitor-resources:v2
+            image: monitor:v1
             volumeMounts:
             - name: storage
               mountPath: /tmp

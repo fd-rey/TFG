@@ -34,28 +34,30 @@ def memDump(shouldStop):
             break;
         mem  =  psutil.virtual_memory()
         used =  (mem.total - mem.available)
-        # f.write(str(used)+" "+str(sample)+" \n")
+        f.write(str(used)+" "+str(sample)+" \n")
         print(str(used)+", "+str(mem.percent)+"% "+str(sample))
 
-        # f.write(str(mem.percent)+" "+str(sample)+" \n")
-        # print(str(mem.percent)+" "+str(sample))
         sample += 0.5;
         time.sleep(0.5)
     f.close()
 
 def consumeResources():
     #create a large matrix
-    M = 5000
+    print '----- dummy process done -----'
+    M = 10000
     A = []
     for i in range (M):
-        print i
-        A.append([0 for x in range(M)])
         mem = psutil.virtual_memory()
-        print(str(mem.percent))
         if mem.percent > 75:
             break
-    print '----- dummy process done -----'
+        print(str(mem.percent))
+
+        A.append([])
+        for j in range (M):
+            A[i].append(0)
+
     A = None
+    print '----- dummy process done -----'
 
 if __name__ == '__main__':
 
