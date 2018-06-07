@@ -6,11 +6,6 @@ a <- read.table("raw/cpu_dump.txt")
 head(a)
 print("--------------------------")
 
-#parsear el archivo raw
-a$V1 <- gsub("[", "", a$V1, fixed = TRUE)
-a$V2 <- gsub("]", "", a$V2, fixed = TRUE)
-a$V1 <- gsub(",", "", a$V1, fixed = TRUE)
-
 
 a$V1 <- as.numeric(a$V1)
 a$V2 <- as.numeric(a$V2)
@@ -18,21 +13,23 @@ a$V2 <- as.numeric(a$V2)
 
 # Calcular la media de cpu1 y cpu2 para cada muestra
 # para obtener el consumo total de cpu en ese momento
-v1v2 <- apply(a[,c(1,2)],FUN=mean,MARGIN=1)
-a <- data.frame(V1=v1v2,V3=a$V3)
-head(a)
+# v1v2 <- apply(a[,c(1,2)],FUN=mean,MARGIN=1)
+# a <- data.frame(V1=v1v2,V3=a$V3)
+# head(a)
+a <- data.frame(V1=a$V1,V2=a$V2)
 
 
 # table(a$V3)
 
 ## SEPARO LAS 't'
 
-valor <- sort(unique(a$V3))
+valor <- sort(unique(a$V2))
 length(valor)
 simulaciones <- list()
 
 for(i in 1:length(valor)){
-  simulaciones[[i]] <- a[a$V3 == valor[i],]
+  # simulaciones[[i]] <- a[a$V3 == valor[i],]
+  simulaciones[[i]] <- a[a$V2 == valor[i],]
 }
 
 # simulaciones
@@ -45,8 +42,6 @@ for(i in 1:length(simulaciones)){
 }
 
 # cpu_mean
-
-
 
 #Standard deviation
 
@@ -62,7 +57,7 @@ for(i in 1:length(simulaciones)){
 data_cpu <- data.frame(
   cpu1 = c( unlist(cpu_mean)),
   cpu1sd = c( unlist(cpu_sd)),
-  time = unique(a$V3)
+  time = unique(a$V2)
 )
 
 
