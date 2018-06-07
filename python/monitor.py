@@ -14,9 +14,9 @@ def cpuDump(shouldStop):
         if shouldStop.value == 1:
             break;
 
-        data = psutil.cpu_percent(interval=0.5, percpu=True)
+        data = psutil.cpu_percent(interval=0.5, percpu=False)
         f.write(str(data)+" "+str(sample)+" \n")
-        print(str(data)+" "+str(sample))
+        print("cpu: "+str(data)+" "+str(sample))
         sample += 0.5;
     f.close()
 
@@ -32,23 +32,29 @@ def memDump(shouldStop):
     while True:
         if shouldStop.value == 1:
             break;
-        data =  psutil.virtual_memory()
-        f.write(str(data.percent)+" "+str(sample)+" \n")
-        print(str(data.percent)+" "+str(sample))
+        mem  =  psutil.virtual_memory()
+        used =  (mem.total - mem.available)
+        # f.write(str(used)+" "+str(sample)+" \n")
+        print(str(used)+", "+str(mem.percent)+"% "+str(sample))
+
+        # f.write(str(mem.percent)+" "+str(sample)+" \n")
+        # print(str(mem.percent)+" "+str(sample))
         sample += 0.5;
         time.sleep(0.5)
     f.close()
 
 def consumeResources():
     #create a large matrix
-    M = 15000
+    M = 10000
     A = []
     for i in range (M):
+        print i
         A.append([0 for x in range(M)])
         mem = psutil.virtual_memory()
+        print(str(mem.percent))
         if mem.percent > 75:
             break
-    print 'done'
+    print '----- dummy process done -----'
     A = None
 
 if __name__ == '__main__':
@@ -61,11 +67,11 @@ if __name__ == '__main__':
 
     time.sleep(4)
     # start simulation
-    print "begin simulation"
+    print "----- begin simulation -----"
     consume1 =  mp.Process(target=consumeResources)
     consume1.start()
     consume1.join()
-    print "end simulation"
+    print "----- end simulation -----"
     # end simulation
     time.sleep(4)
     stop.value = 1
