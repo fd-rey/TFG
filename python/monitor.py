@@ -45,7 +45,7 @@ def memDump(shouldStop):
 
 def consumeResources():
     #create a large matrix
-    M = 10000
+    M = 5000
     A = []
     for i in range (M):
         print i
