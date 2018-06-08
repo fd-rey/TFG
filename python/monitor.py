@@ -70,9 +70,9 @@ if __name__ == '__main__':
     time.sleep(4)
     # start simulation
     print "----- begin simulation -----"
-    consume1 =  mp.Process(target=consumeResources)
-    consume1.start()
-    consume1.join()
+    dummy =  mp.Process(target=consumeResources)
+    dummy.start()
+    dummy.join()
     print "----- end simulation -----"
     # end simulation
     time.sleep(4)
